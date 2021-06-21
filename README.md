@@ -245,3 +245,37 @@ $ yarn add --dev lint-staged
 ```
 
 参考：[husky](https://typicode.github.io/husky/#/)，[lint-staged](https://github.com/okonet/lint-staged)
+
+## Reat Native 理解
+
+### React Native 与本地的桥接
+
+在 iOS 项目的 `AppDelegate.m` 中，RN 在应用启动后做了三件事：
+
+第一是 `InitializeFlipper`，初始化 Flipper，这个是一个调试工具，并且只会在 Debug 模式下才会加载，如果不使用，可以在 `Podfile` 中注释掉 `use_flipper!()` 这行代码以加快编译速度。
+
+第二是创建 `RCTBridge` 这个类的对象，并设置代理。这决定了 RN 的内容如何加载到 iOS 项目中，在 Debug 环境下是实时加载的，而在 Release 环境下会打包到 `main.jsbundle` 中去。
+
+``` objc
+- (NSURL *)sourceURLForBridge:(RCTBridge *)bridge {
+#if DEBUG
+    return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+#else
+    return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+#endif
+}
+```
+
+第三是将创建一个 `RCTRootView` 的视图对象，并将这个视图作为一个 iOS 的控制器的根视图，以把 RN 的内容显示出来。
+
+这其中 `RCTRootView` 对象的创建需要指定 `moduleName`：
+
+``` objc
+RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge moduleName:@"MyRNDemoApp" initialProperties:nil];
+```
+
+这里的字符串 `moduleName` 对应到 RN 中就是 index.js 中的 `AppRegistry.registerComponent(appName, () => App);` 的 `appName`。
+
+`AppRegistry.registerComponent(appName, () => App);` 中的 `App` 就是将要作为 `RCTRootView` 显示的那个根组件，一般会是 `App.js`。
+
+也就是说，我们在 index.js 中可以使用该方法注册多个 `component`，然后提供给 iOS 中原生视图的不同控制器中，达到 React Native 与原生混编的目的。
