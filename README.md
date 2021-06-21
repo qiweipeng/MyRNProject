@@ -147,3 +147,34 @@ module.exports = {
 之后的 `"editor.defaultFormatter": "dbaeumer.vscode-eslint"` 设置了 `.js`、`.jsx`、`.ts`、`.tsx` 文件的默认格式化器为 ESLint 插件提供的格式化器（因为 VSCode 默认提供了一个格式化器，如果没设置在第一次使用 `Shift+Alt+F` 时会提示选择）。
 
 这些配置最好在同时在项目（Workspace）的 settings.json 中设置，多人开发时都可以享用。
+
+### 为除了 JS 文件外的格式添加 ESLint 支持
+
+在 .eslintrc.js 增加配置：
+
+```
+parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
+overrides: [
+  {
+    files: ['*.ts', '*.tsx'],
+    parser: '@typescript-eslint/parser',
+    extends: ['plugin:@typescript-eslint/recommended'],
+    plugins: ['@typescript-eslint'],
+  },
+],
+```
+
+其实创建项目默认的 `@react-native-community/eslint-config` 已经对 TypeScript 有了较好的支持，其中也包含了 `@typescript-eslint` 的依赖，只是实践中发现上述规则对类型要求会更加严格（比如使用 any 会警告提示），后续实践可继续观察这样写的区别。
+
+由于该库已经安装了，我们无需重复安装，不过也可以手动再安装一遍（[Installation](https://github.com/typescript-eslint/typescript-eslint/blob/master/docs/getting-started/linting/README.md#installation)）：
+
+```
+$ yarn add -D eslint typescript @typescript-eslint/parser @typescript-eslint/eslint-plugin
+$ npm i --save-dev eslint typescript @typescript-eslint/parser @typescript-eslint/eslint-plugin
+```
+
+参考：[TypeScript ESLint](https://github.com/typescript-eslint/typescript-eslint)
