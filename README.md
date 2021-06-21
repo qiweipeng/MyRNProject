@@ -42,3 +42,45 @@ target 'MyRNProject' do
   end
 end
 ```
+
+### 支持 TypeScript
+
+```
+yarn add -D typescript @types/jest @types/react @types/react-native @types/react-test-renderer
+```
+
+创建 `tsconfig.json` 文件，写入：
+
+``` json
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "react",
+    "lib": ["es6"],
+    "moduleResolution": "node",
+    "noEmit": true,
+    "strict": true,
+    "target": "esnext"
+  },
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
+  ]
+}
+```
+
+创建 `jest.config.js` 文件并写入：
+
+``` javascript
+module.exports = {
+  preset: 'react-native',
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+};
+```
+
+参考：[Adding TypeScript to an Existing Project](https://reactnative.dev/docs/typescript#adding-typescript-to-an-existing-project)
