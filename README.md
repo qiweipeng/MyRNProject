@@ -178,3 +178,70 @@ $ npm i --save-dev eslint typescript @typescript-eslint/parser @typescript-eslin
 ```
 
 参考：[TypeScript ESLint](https://github.com/typescript-eslint/typescript-eslint)
+
+### 为 Git 提交增加 ESLint 检查
+
+为了保证每次 Git 提交时代码是符合 ESLint 规则的，否则无法提交。
+
+#### 安装 husky（v6.x） 和 lint-staged
+
+```
+$ yarn add --dev husky
+$ yarn add --dev lint-staged
+```
+
+之后使用
+
+```
+$ npm set-script prepare "husky install" && npm run prepare
+```
+
+该命令会在 package.json 中添加 `"prepare": "husky install"`，并会创建 `.husky` 文件夹。
+
+之后使用
+
+```
+npx husky add .husky/pre-commit "yarn lint-staged"
+```
+
+该命令会在 `.husky` 文件夹下创建 `pre-commit` 文件，并写入 `yarn lint-staged` 命令。
+
+同时，在 package.json 中添加
+
+```
+"lint-staged": {
+  "*.js|*.jsx|*.ts|*.vue|*tsx": [
+    "eslint",
+    "eslint --fix",
+    "git add"
+  ]
+}
+```
+
+#### 安装 husky v4 和 lint-staged
+
+如果安装 husky v4 版本，则执行
+
+```
+$ yarn add --dev husky@4
+$ yarn add --dev lint-staged
+```
+
+之后在 package.json 中添加
+
+```
+"husky": {
+  "hooks": {
+    "pre-commit": "lint-staged"
+  }
+},
+"lint-staged": {
+  "*.js|*.jsx|*.ts|*.vue|*tsx": [
+    "eslint",
+    "eslint --fix",
+    "git add"
+  ]
+}
+```
+
+参考：[husky](https://typicode.github.io/husky/#/)，[lint-staged](https://github.com/okonet/lint-staged)
