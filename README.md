@@ -84,3 +84,66 @@ module.exports = {
 ```
 
 参考：[Adding TypeScript to an Existing Project](https://reactnative.dev/docs/typescript#adding-typescript-to-an-existing-project)
+
+## ESLint 相关配置
+
+### 安装 ESLint
+
+如果是一个空项目，我们需要安装 ESLint，不过一个新的 React Native 项目创建好之后，从 `package.json` 文件可以看到，其已经安装了 ESLint：
+
+``` json
+"devDependencies": {
+  ...
+  "@react-native-community/eslint-config": "^2.0.0",
+  "eslint": "7.14.0",
+  ...
+},
+```
+
+这里面除了 ESLint 本身，还安装了一个 [@react-native-community/eslint-config](https://github.com/facebook/react-native/tree/master/packages/eslint-config-react-native-community#readme)，这是 React Native 官方提供的一个 ESLint 的规则。
+
+项目默认就是使用的这个规则，其配置在 `.eslintrc.js` 文件中：
+
+```
+module.exports = {
+  root: true,
+  extends: '@react-native-community',
+};
+
+```
+
+我们也可以对 `.eslintrc.js` 进行配置增加或修改规则。
+
+### VSCode 中关于 ESLint 的相关配置
+
+首先，VSCode 需要安装名为 ESLint 的插件。
+
+之后，需要在 `settings.json` 中进行配置：
+
+``` json
+"eslint.packageManager": "yarn",
+// 开启 ESLint 作为格式化器
+"eslint.format.enable": true,
+// 开启不同语言使用该格式化器
+"[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+},
+"[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+},
+"[javascriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+},
+"[typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+},
+
+// 文件保存自动格式化，可选
+"editor.formatOnSave": true,
+```
+
+其中 `"eslint.format.enable": true` 使得 VSCode 使用 `Shift+Alt+F` 格式化代码时可以选择使用 ESLint 插件提供的格式化器，该格式化器会按照配置的 ESLint 规则去格式化代码。
+
+之后的 `"editor.defaultFormatter": "dbaeumer.vscode-eslint"` 设置了 `.js`、`.jsx`、`.ts`、`.tsx` 文件的默认格式化器为 ESLint 插件提供的格式化器（因为 VSCode 默认提供了一个格式化器，如果没设置在第一次使用 `Shift+Alt+F` 时会提示选择）。
+
+这些配置最好在同时在项目（Workspace）的 settings.json 中设置，多人开发时都可以享用。
