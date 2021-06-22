@@ -279,3 +279,75 @@ RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge moduleName:@"
 `AppRegistry.registerComponent(appName, () => App);` 中的 `App` 就是将要作为 `RCTRootView` 显示的那个根组件，一般会是 `App.js`。
 
 也就是说，我们在 index.js 中可以使用该方法注册多个 `component`，然后提供给 iOS 中原生视图的不同控制器中，达到 React Native 与原生混编的目的。
+
+### 如何将 React Native 添加到现有到 iOS 项目中
+
+最简便的方式是先创建一个完整的 RN 项目，再将 RN 项目中的 `ios` 文件夹中的内容替换为现有的项目。
+
+下面介绍如何替换：
+
+1. 移除 RN 项目 `ios` 文件夹内容，将现有项目所有内容移动到 RN 项目的 `ios` 文件夹中；
+2. 修改 `Podfile` 文件，添加如下内容：
+
+``` ruby
+inhibit_all_warnings!
+
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
+platform :ios, '10.0'
+
+target 'MyRNProject' do
+  config = use_native_modules!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :hermes_enabled => false
+  )
+
+  # Enables Flipper.
+  #
+  # Note that if you have use_frameworks! enabled, Flipper will not work and
+  # you should disable the next line.
+#  use_flipper!()
+
+  post_install do |installer|
+    react_native_post_install(installer)
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 9.0
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '9.0'
+        end
+      end
+    end
+  end
+end
+```
+
+3. 执行 `pod install`；
+4. 参照 RN 中原有 iOS 项目的 `AppDelegate` 中的方式修改现有项目（当然也可以只在特定控制器引入 RN）；
+5. 在 `Target - Build Phases` 中参照 RN 原有 iOS 项目添加 `Start Packager` 和 `Bundle React Native code and images` 脚本：
+
+```
+// Start Packager
+// 不勾选 Show environment variables in build log
+export RCT_METRO_PORT="${RCT_METRO_PORT:=8081}"
+echo "export RCT_METRO_PORT=${RCT_METRO_PORT}" > "${SRCROOT}/../node_modules/react-native/scripts/.packager.env"
+if [ -z "${RCT_NO_LAUNCH_PACKAGER+xxx}" ] ; then
+  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then
+    if ! curl -s "http://localhost:${RCT_METRO_PORT}/status" | grep -q "packager-status:running" ; then
+      echo "Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly"
+      exit 2
+    fi
+  else
+    open "$SRCROOT/../node_modules/react-native/scripts/launchPackager.command" || echo "Can't start packager automatically"
+  fi
+fi
+
+// Bundle React Native code and images
+set -e
+
+export NODE_BINARY=node
+../node_modules/react-native/scripts/react-native-xcode.sh
+```
