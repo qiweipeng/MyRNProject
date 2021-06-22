@@ -1,3 +1,10 @@
+//
+//  AppDelegate.m
+//  MyRNProject
+//
+//  Created by Weipeng Qi on 2021/6/22.
+//
+
 #import "AppDelegate.h"
 
 #import <React/RCTBridge.h>
@@ -22,6 +29,10 @@ static void InitializeFlipper(UIApplication *application) {
     [client start];
 }
 #endif
+
+@interface AppDelegate ()
+
+@end
 
 @implementation AppDelegate
 
