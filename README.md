@@ -89,7 +89,7 @@ module.exports = {
 
 ### 安装 ESLint
 
-如果是一个空项目，我们需要安装 ESLint，不过一个新的 React Native 项目创建好之后，从 `package.json` 文件可以看到，其已经安装了 ESLint：
+如果是一个空项目，我们需要安装 ESLint，不过一个新的 React Native 项目创建好之后，从 `package.json` 文件可以看到，其已经安装了 ESLint：
 
 ``` json
 "devDependencies": {
@@ -161,14 +161,14 @@ parserOptions: {
 overrides: [
   {
     files: ['*.ts', '*.tsx'],
-    parser: '@typescript-eslint/parser',
+    parser: '@typescript-eslint/parser', // 这行可以不写
     extends: ['plugin:@typescript-eslint/recommended'],
-    plugins: ['@typescript-eslint'],
+    plugins: ['@typescript-eslint'], // 这行可以不写
   },
 ],
 ```
 
-其实创建项目默认的 `@react-native-community/eslint-config` 已经对 TypeScript 有了较好的支持，其中也包含了 `@typescript-eslint` 的依赖，只是实践中发现上述规则对类型要求会更加严格（比如使用 any 会警告提示），后续实践可继续观察这样写的区别。
+其实创建项目默认的 `@react-native-community/eslint-config` 已经对 TypeScript 有了较好的支持，其中也包含了 `@typescript-eslint` 的依赖，并设置了将 `@typescript-eslint/parser` 作为 TypeScript 的解析器。只是没有额外使用 `@typescript-eslint` 中 [@typescript-eslint/recommended](https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/src/configs/recommended.ts) 这套推荐的规则。实践中发现上述规则对类型要求会更加严格（比如使用 any 会警告提示），后续实践可继续观察这样写的区别。
 
 由于该库已经安装了，我们无需重复安装，不过也可以手动再安装一遍（[Installation](https://github.com/typescript-eslint/typescript-eslint/blob/master/docs/getting-started/linting/README.md#installation)）：
 
