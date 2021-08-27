@@ -42,10 +42,9 @@
     "preset": "react-native"
   },
   "lint-staged": {
-    "*.js|*.jsx|*.ts|*.vue|*tsx": [
+    "*.js|*.jsx|*.ts|*.vue|*.tsx": [
       "eslint",
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
   }
 }
