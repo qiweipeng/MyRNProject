@@ -2,9 +2,9 @@ import {
   useEffect,
   useMemo,
   useCallback,
+  useRef,
   useReducer,
   Reducer,
-  useRef,
 } from 'react';
 import axios, {
   AxiosRequestConfig,
@@ -59,8 +59,13 @@ const initialState = {
   loading: false,
 };
 
+type Options = {
+  manual?: boolean;
+};
+
 const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
   config: AxiosRequestConfig<D>,
+  options?: Options,
 ): {
   response?: R;
   error?: AxiosError<unknown, D> | Error | Cancel;
@@ -123,6 +128,12 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
     },
     [fetchDataAsync],
   );
+
+  useEffect(() => {
+    if (options?.manual === false) {
+      fetchData();
+    }
+  }, [fetchData, options?.manual]);
 
   return {
     response: state.response,
