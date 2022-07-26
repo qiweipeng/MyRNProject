@@ -7,6 +7,7 @@ export type MainTabParamList = {
 
 export type MainParamList = {
   MainTab: NavigatorScreenParams<MainTabParamList>;
+  Detail: undefined;
 };
 
 export type LoginParamList = {

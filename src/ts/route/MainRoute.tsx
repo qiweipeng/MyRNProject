@@ -8,6 +8,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {MainParamList, MainTabParamList} from './ParamList';
 import HomeScreen from '../screens/HomeScreen';
 import MineScreen from '../screens/MineScreen';
+import DetailScreen from '../screens/DetailScreen';
 
 const Stack = createStackNavigator<MainParamList>();
 const Tab = createBottomTabNavigator<MainTabParamList>();
@@ -19,7 +20,7 @@ function MainTab(): JSX.Element {
         headerTitleAlign: 'center', // 安卓标题居中
         tabBarActiveTintColor: '#FCD84D', // Tab Bar 选中文字颜色
         tabBarInactiveTintColor: '#000000', // Tab Bar 未选中文字颜色
-        headerStyle: {elevation: 0, shadowOpacity: 0, borderBottomWidth: 0}, // 导航栏底部阴影
+        headerStyle: {elevation: 0, shadowOpacity: 0, borderBottomWidth: 0}, // 导航栏底部阴影
         headerTintColor: '#1A1D21', // 导航栏标题颜色
       }}>
       <Tab.Screen
@@ -78,7 +79,7 @@ export function MainStack(): JSX.Element {
       screenOptions={{
         headerTitleAlign: 'center', // 安卓标题居中
         headerBackTitleVisible: false,
-        headerStyle: {elevation: 0, shadowOpacity: 0, borderBottomWidth: 0}, // 导航栏底部阴影
+        headerStyle: {elevation: 0, shadowOpacity: 0, borderBottomWidth: 0}, // 导航栏底部阴影
         headerTintColor: '#1A1D21', // 导航栏标题颜色
         headerBackImage: () => {
           return (
@@ -95,6 +96,7 @@ export function MainStack(): JSX.Element {
           component={MainTab}
           options={{headerShown: false}}
         />
+        <Stack.Screen name="Detail" component={DetailScreen} />
         {/* 普通栈路由 */}
       </Stack.Group>
       <Stack.Group
