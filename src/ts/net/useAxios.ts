@@ -1,4 +1,11 @@
-import {useEffect, useMemo, useCallback, useReducer, Reducer} from 'react';
+import {
+  useEffect,
+  useMemo,
+  useCallback,
+  useReducer,
+  Reducer,
+  useRef,
+} from 'react';
 import axios, {
   AxiosRequestConfig,
   AxiosResponse,
@@ -78,31 +85,24 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
     };
   }, [source]);
 
+  const configRef = useRef(config);
   useEffect(() => {
-    const requestInterceptor = instance.interceptors.request.use<
-      AxiosRequestConfig<D>
-    >(c => {
-      return {...config, ...c};
-    });
-    return () => {
-      instance.interceptors.request.eject(requestInterceptor);
-    };
-  }, [config, instance.interceptors.request]);
-
-  useEffect(() => {
-    const responseInterceptor = instance.interceptors.response.use(r => {
-      return r;
-    });
-    return () => {
-      instance.interceptors.response.eject(responseInterceptor);
-    };
-  }, [instance.interceptors.response]);
+    configRef.current = config;
+  }, [config]);
 
   const fetchDataAsync = useCallback(
     async (c?: AxiosRequestConfig<D>) => {
       dispatch({type: 'start'});
       try {
-        const r = await instance.request<T, R, D>({...c});
+        const r = await instance.request<T, R, D>({
+          ...configRef.current,
+          ...c,
+          params: {...configRef.current.params, ...c?.params},
+          data:
+            c?.data !== undefined
+              ? {...configRef.current.data, ...c.data}
+              : configRef.current.data,
+        });
         dispatch({type: 'resolve', response: r});
         return r;
       } catch (e) {
@@ -117,8 +117,9 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
   );
   const fetchData = useCallback(
     (c?: AxiosRequestConfig) => {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      fetchDataAsync(c).catch(() => {});
+      fetchDataAsync(c).catch(() => {
+        return;
+      });
     },
     [fetchDataAsync],
   );
