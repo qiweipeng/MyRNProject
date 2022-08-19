@@ -117,7 +117,7 @@
 		BAB7688C2681E69000F040A3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1250;
+				LastUpgradeCheck = 1340;
 				TargetAttributes = {
 					BAB768932681E69000F040A3 = {
 						CreatedOnToolsVersion = 12.5.1;
