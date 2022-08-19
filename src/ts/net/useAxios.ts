@@ -60,7 +60,7 @@ const initialState = {
 };
 
 type Options = {
-  manual?: boolean;
+  manual?: boolean; // default is true
 };
 
 const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
@@ -82,13 +82,6 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
     () => axios.create({cancelToken: source.token}),
     [source],
   );
-
-  useEffect(() => {
-    return () => {
-      dispatch({type: 'reset'});
-      source.cancel('Operation canceled as the component has been unmounted.');
-    };
-  }, [source]);
 
   const configRef = useRef(config);
   useEffect(() => {
@@ -134,6 +127,13 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
       fetchData();
     }
   }, [fetchData, options?.manual]);
+
+  useEffect(() => {
+    return () => {
+      dispatch({type: 'reset'});
+      source.cancel('Operation canceled as the component has been unmounted.');
+    };
+  }, [source]);
 
   return {
     response: state.response,
