@@ -85,15 +85,19 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
   );
 
   const configRef = useRef(config);
+  const optionsRef = useRef(options);
   useEffect(() => {
     configRef.current = config;
   }, [config]);
+  useEffect(() => {
+    optionsRef.current = options;
+  }, [options]);
 
   const fetchDataAsync = useCallback(
     async (c?: AxiosRequestConfig<D>) => {
       const timeout = setTimeout(() => {
         dispatch({type: 'start'});
-      }, options?.loadingDelay ?? 0);
+      }, optionsRef.current?.loadingDelay ?? 0);
       try {
         const r = await instance.request<T, R, D>({
           ...configRef.current,
@@ -116,7 +120,7 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
         return Promise.reject(e);
       }
     },
-    [instance, options?.loadingDelay],
+    [instance],
   );
   const fetchData = useCallback(
     (c?: AxiosRequestConfig<D>) => {
