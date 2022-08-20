@@ -132,10 +132,10 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
   );
 
   useEffect(() => {
-    if (options?.manual === false) {
+    if (optionsRef.current?.manual === false) {
       fetchData();
     }
-  }, [fetchData, options?.manual]);
+  }, [fetchData]);
 
   useEffect(() => {
     return () => {
