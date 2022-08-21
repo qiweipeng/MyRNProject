@@ -20,7 +20,7 @@ type State<T, D, R = AxiosResponse<T, D>> = {
 };
 
 type Action<T, D, R = AxiosResponse<T, D>> = {
-  type: 'start' | 'resolve' | 'reject' | 'reset';
+  type: 'start' | 'cancel' | 'resolve' | 'reject';
   response?: R;
   error?: AxiosError<unknown, D> | Error | Cancel;
 };
@@ -32,6 +32,11 @@ function reducer<T, D, R>(state: State<T, D, R>, action: Action<T, D, R>) {
         ...state,
         loading: true,
       };
+    case 'cancel':
+      return {
+        ...state,
+        loading: false,
+      };
     case 'resolve':
       return {
         response: action.response,
@@ -42,12 +47,6 @@ function reducer<T, D, R>(state: State<T, D, R>, action: Action<T, D, R>) {
       return {
         response: undefined,
         error: action.error,
-        loading: false,
-      };
-    case 'reset':
-      return {
-        response: undefined,
-        error: undefined,
         loading: false,
       };
   }
@@ -73,16 +72,11 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
   loading: boolean;
   fetchData: (config?: AxiosRequestConfig<D>) => void;
   fetchDataAsync: (config?: AxiosRequestConfig<D>) => Promise<R>;
+  cancel: () => void;
 } => {
   const [state, dispatch] = useReducer<
     Reducer<State<T, D, R>, Action<T, D, R>>
   >(reducer, initialState);
-
-  const source = useMemo(() => axios.CancelToken.source(), []);
-  const instance = useMemo(
-    () => axios.create({cancelToken: source.token}),
-    [source],
-  );
 
   const configRef = useRef(config);
   const optionsRef = useRef(options);
@@ -93,13 +87,18 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
     optionsRef.current = options;
   }, [options]);
 
+  const instance = useMemo(() => axios.create({}), []);
+  const abortControllerRef = useRef<AbortController>();
+
   const fetchDataAsync = useCallback(
     async (c?: AxiosRequestConfig<D>) => {
+      abortControllerRef.current = new AbortController();
       const timeout = setTimeout(() => {
         dispatch({type: 'start'});
       }, optionsRef.current?.loadingDelay ?? 0);
       try {
         const r = await instance.request<T, R, D>({
+          signal: abortControllerRef.current.signal,
           ...configRef.current,
           ...c,
           params: {...configRef.current.params, ...c?.params},
@@ -137,12 +136,17 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
     }
   }, [fetchData]);
 
+  const cancel = useCallback(() => {
+    abortControllerRef.current?.abort();
+    dispatch({type: 'cancel'});
+  }, []);
+
   useEffect(() => {
     return () => {
-      dispatch({type: 'reset'});
-      source.cancel('Operation canceled as the component has been unmounted.');
+      abortControllerRef.current?.abort();
+      dispatch({type: 'cancel'});
     };
-  }, [source]);
+  }, []);
 
   return {
     response: state.response,
@@ -150,6 +154,7 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
     loading: state.loading,
     fetchData,
     fetchDataAsync,
+    cancel,
   };
 };
 
