@@ -109,7 +109,7 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
           ...c,
           params: {...configRef.current.params, ...c?.params},
           data:
-            c?.data === undefined
+            c?.data === undefined || c.data === null
               ? configRef.current.data
               : typeof c.data === 'object'
               ? {...configRef.current.data, ...c.data}
