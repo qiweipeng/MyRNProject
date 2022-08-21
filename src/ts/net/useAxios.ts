@@ -90,13 +90,19 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
   const instance = useMemo(() => axios.create({}), []);
   const abortControllerRef = useRef<AbortController>();
 
+  const cancel = useCallback(() => {
+    abortControllerRef.current?.abort();
+    dispatch({type: 'cancel'});
+  }, []);
+
   const fetchDataAsync = useCallback(
     async (c?: AxiosRequestConfig<D>) => {
-      abortControllerRef.current = new AbortController();
       const timeout = setTimeout(() => {
         dispatch({type: 'start'});
       }, optionsRef.current?.loadingDelay ?? 0);
+      cancel();
       try {
+        abortControllerRef.current = new AbortController();
         const r = await instance.request<T, R, D>({
           signal: abortControllerRef.current.signal,
           ...configRef.current,
@@ -119,7 +125,7 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
         return Promise.reject(e);
       }
     },
-    [instance],
+    [cancel, instance],
   );
   const fetchData = useCallback(
     (c?: AxiosRequestConfig<D>) => {
@@ -136,17 +142,11 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
     }
   }, [fetchData]);
 
-  const cancel = useCallback(() => {
-    abortControllerRef.current?.abort();
-    dispatch({type: 'cancel'});
-  }, []);
-
   useEffect(() => {
     return () => {
-      abortControllerRef.current?.abort();
-      dispatch({type: 'cancel'});
+      cancel();
     };
-  }, []);
+  }, [cancel]);
 
   return {
     response: state.response,
