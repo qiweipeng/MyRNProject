@@ -109,9 +109,11 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
           ...c,
           params: {...configRef.current.params, ...c?.params},
           data:
-            c?.data !== undefined
+            c?.data === undefined
+              ? configRef.current.data
+              : typeof c.data === 'object'
               ? {...configRef.current.data, ...c.data}
-              : configRef.current.data,
+              : c.data,
         });
         clearTimeout(timeout);
         dispatch({type: 'resolve', response: r});
