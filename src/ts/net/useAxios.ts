@@ -87,7 +87,7 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
     optionsRef.current = options;
   }, [options]);
 
-  const instance = useMemo(() => axios.create({}), []);
+  const instance = useMemo(() => axios.create(), []);
   const abortControllerRef = useRef<AbortController>();
 
   const cancel = useCallback(() => {
