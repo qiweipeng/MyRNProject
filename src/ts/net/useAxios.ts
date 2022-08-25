@@ -11,6 +11,7 @@ import axios, {
   AxiosResponse,
   AxiosError,
   Cancel,
+  AxiosInterceptorManager,
 } from 'axios';
 
 type State<T, D, R = AxiosResponse<T, D>> = {
@@ -73,6 +74,8 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
   fetchData: (config?: AxiosRequestConfig<D>) => void;
   fetchDataAsync: (config?: AxiosRequestConfig<D>) => Promise<R>;
   cancel: () => void;
+  requestInterceptors: AxiosInterceptorManager<AxiosRequestConfig<D>>;
+  responseInterceptors: AxiosInterceptorManager<AxiosResponse<T, D>>;
 } => {
   const [state, dispatch] = useReducer<
     Reducer<State<T, D, R>, Action<T, D, R>>
@@ -157,11 +160,20 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
     fetchData,
     fetchDataAsync,
     cancel,
+    requestInterceptors: instance.interceptors.request,
+    responseInterceptors: instance.interceptors.response,
   };
 };
 
 const isCancel = axios.isCancel;
 const isAxiosError = axios.isAxiosError;
 
-export type {AxiosRequestConfig, AxiosResponse, AxiosError, Cancel};
+export type {
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosError,
+  Cancel,
+  AxiosInterceptorManager,
+  Options,
+};
 export {useAxios, isCancel, isAxiosError};
