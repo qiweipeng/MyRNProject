@@ -981,6 +981,14 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@qiweipeng/use-axios@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@qiweipeng/use-axios/-/use-axios-0.0.3.tgz#4ecb9212357753dce511f9d9cb18ff7c4b04cebb"
+  integrity sha512-RxwJ8N2pUrXlhGxcXgzAxvXIkb6Ho82I3Mlt0kKce5gMuqCoMa7eHxnUw9J3ExzVzT0Vs70CCeavTfEypFrWYw==
+  dependencies:
+    axios "^0.27.2"
+    yup "^0.32.11"
+
 "@react-native-async-storage/async-storage@^1.15.6":
   version "1.15.6"
   resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.15.6.tgz#a4fd461d2d891326e006d2284d060229f6c2b328"
