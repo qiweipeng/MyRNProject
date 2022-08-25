@@ -11,6 +11,7 @@ import {
   Options,
   AxiosInterceptorManager,
 } from './useAxios';
+import useUpdateRef from './utils/useUpdateRef';
 
 class ValidationError<T, D> extends Error {
   response: AxiosResponse<T, D>;
@@ -53,10 +54,7 @@ const useValidatedAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
     responseInterceptors,
   } = useAxios<T, D, R>(config, options);
 
-  const validationSchemaRef = useRef(validationSchema);
-  useEffect(() => {
-    validationSchemaRef.current = validationSchema;
-  }, [validationSchema]);
+  const validationSchemaRef = useUpdateRef(validationSchema);
 
   useEffect(() => {
     const responseInterceptor = responseInterceptors.use(r => {
@@ -86,7 +84,7 @@ const useValidatedAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
     return () => {
       responseInterceptors.eject(responseInterceptor);
     };
-  }, [responseInterceptors]);
+  }, [responseInterceptors, validationSchemaRef]);
 
   return {
     response,

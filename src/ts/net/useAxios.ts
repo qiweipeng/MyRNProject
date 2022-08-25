@@ -13,6 +13,7 @@ import axios, {
   Cancel,
   AxiosInterceptorManager,
 } from 'axios';
+import useUpdateRef from './utils/useUpdateRef';
 
 type State<T, D, R = AxiosResponse<T, D>> = {
   response?: R;
@@ -81,14 +82,8 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
     Reducer<State<T, D, R>, Action<T, D, R>>
   >(reducer, initialState);
 
-  const configRef = useRef(config);
-  const optionsRef = useRef(options);
-  useEffect(() => {
-    configRef.current = config;
-  }, [config]);
-  useEffect(() => {
-    optionsRef.current = options;
-  }, [options]);
+  const configRef = useUpdateRef(config);
+  const optionsRef = useUpdateRef(options);
 
   const instance = useMemo(() => axios.create(), []);
   const abortControllerRef = useRef<AbortController>();
@@ -130,7 +125,7 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
         return Promise.reject(e);
       }
     },
-    [cancel, instance],
+    [cancel, configRef, instance, optionsRef],
   );
   const fetchData = useCallback(
     (c?: AxiosRequestConfig<D>) => {
@@ -145,7 +140,7 @@ const useAxios = <T = unknown, D = unknown, R = AxiosResponse<T, D>>(
     if (optionsRef.current?.manual === false) {
       fetchData();
     }
-  }, [fetchData]);
+  }, [fetchData, optionsRef]);
 
   useEffect(() => {
     return () => {
