@@ -981,10 +981,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@qiweipeng/use-axios@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@qiweipeng/use-axios/-/use-axios-0.0.3.tgz#4ecb9212357753dce511f9d9cb18ff7c4b04cebb"
-  integrity sha512-RxwJ8N2pUrXlhGxcXgzAxvXIkb6Ho82I3Mlt0kKce5gMuqCoMa7eHxnUw9J3ExzVzT0Vs70CCeavTfEypFrWYw==
+"@qiweipeng/use-axios@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@qiweipeng/use-axios/-/use-axios-0.0.5.tgz#4511c85f4c123f31681efc91dccd831fa4502e43"
+  integrity sha512-GdjjDQiF8SsFK3HqGAWunvAvVfSU0G20+Cj0CxHGXOaXzJk561y8Y72u1Y1LptoECgdeB2KU+YYMY1RLeBSmCg==
   dependencies:
     axios "^0.27.2"
     yup "^0.32.11"

@@ -11,7 +11,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@qiweipeng/use-axios": "^0.0.3",
+    "@qiweipeng/use-axios": "^0.0.5",
     "@react-native-async-storage/async-storage": "^1.15.6",
     "@react-navigation/bottom-tabs": "^6.0.4",
     "@react-navigation/native": "^6.0.2",
