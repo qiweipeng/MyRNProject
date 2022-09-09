@@ -7,16 +7,16 @@ import React, {
 } from 'react';
 import PopupContainer from './PopupContainer';
 
-type PopupRef = {
+type Popup = {
   show: () => void;
   hide: () => void;
 };
 
-type PopupRefObj = {
-  current: PopupRef | null;
+type PopupObj = {
+  current: Popup | null;
 };
 
-let refs: PopupRefObj[] = [];
+let refs: PopupObj[] = [];
 
 const PopupRoot = forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false);
@@ -43,8 +43,8 @@ const PopupRoot = forwardRef((props, ref) => {
 });
 
 export function Popup(): JSX.Element {
-  const popupRef = useRef<PopupRef | null>(null);
-  const setRef = useCallback((ref: PopupRef | null) => {
+  const popupRef = useRef<Popup | null>(null);
+  const setRef = useCallback((ref: Popup | null) => {
     if (ref) {
       popupRef.current = ref;
       refs.push({
