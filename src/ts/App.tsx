@@ -2,6 +2,7 @@ import React from 'react';
 import {StatusBar} from 'react-native';
 import {AppProvider} from './contexts/AppProvider';
 import AppContent from './route/Route';
+import Popup from './utils/popup';
 
 function App(): JSX.Element {
   return (
@@ -10,6 +11,7 @@ function App(): JSX.Element {
       <StatusBar animated={true} barStyle="dark-content" hidden={false} />
       <AppProvider>
         <AppContent />
+        <Popup />
       </AppProvider>
     </>
   );

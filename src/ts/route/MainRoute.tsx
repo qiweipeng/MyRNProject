@@ -9,6 +9,7 @@ import {MainParamList, MainTabParamList} from './ParamList';
 import HomeScreen from '../screens/HomeScreen';
 import MineScreen from '../screens/MineScreen';
 import DetailScreen from '../screens/DetailScreen';
+import HelloScreen from '../screens/HelloScreen';
 
 const Stack = createStackNavigator<MainParamList>();
 const Tab = createBottomTabNavigator<MainTabParamList>();
@@ -97,6 +98,7 @@ export function MainStack(): JSX.Element {
           options={{headerShown: false}}
         />
         <Stack.Screen name="Detail" component={DetailScreen} />
+        <Stack.Screen name="Hello" component={HelloScreen} />
         {/* 普通栈路由 */}
       </Stack.Group>
       <Stack.Group

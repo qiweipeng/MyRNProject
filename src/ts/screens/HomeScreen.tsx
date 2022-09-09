@@ -22,6 +22,13 @@ export default function HomeScreen(props: Props): JSX.Element {
         }}>
         <Text style={styles.touchText}>Click Me!</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.touch}
+        onPress={() => {
+          navigation.navigate('Hello');
+        }}>
+        <Text style={styles.touchText}>Click Here!</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
