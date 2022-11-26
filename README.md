@@ -20,6 +20,30 @@ npx react-native init MyRNRroject
 :flipper_configuration => FlipperConfiguration.disabled,
 ```
 
+### 支持 TypeScript
+
+```
+yarn add -D typescript @types/jest @types/react @types/react-native @types/react-test-renderer @tsconfig/react-native
+```
+
+创建 `tsconfig.json` 文件，写入：
+
+``` json
+{
+  "extends": "@tsconfig/react-native/tsconfig.json"
+}
+```
+
+创建 `jest.config.js` 文件，写入：
+
+``` javascript
+module.exports = {
+  preset: 'react-native',
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node']
+};
+```
+
+参考：[Adding TypeScript to an Existing Project](https://reactnative.dev/docs/typescript#adding-typescript-to-an-existing-project)
 
 ## Reat Native 理解
 
