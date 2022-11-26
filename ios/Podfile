@@ -1,3 +1,5 @@
+inhibit_all_warnings!
+
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
@@ -25,11 +27,6 @@ target 'MyRNProject' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-
-  target 'MyRNProjectTests' do
-    inherit! :complete
-    # Pods for testing
-  end
 
   post_install do |installer|
     react_native_post_install(
