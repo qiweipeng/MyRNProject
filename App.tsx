@@ -1,8 +1,7 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, Text} from 'react-native';
 
-const App = () => {
-
+const App: () => JSX.Element = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text>Hello World!</Text>
