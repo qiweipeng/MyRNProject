@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useContext,
   useMemo,
+  useRef,
 } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -116,6 +117,11 @@ const useAuth = (): {
     throw new Error('useAuth must be used in AuthProvider!');
   }
 
+  const contextRef = useRef(context);
+  useEffect(() => {
+    contextRef.current = context;
+  }, [context]);
+
   const authActions = useMemo(
     () => ({
       login: async (token: string, userInfo: UserInfo) => {
@@ -123,18 +129,22 @@ const useAuth = (): {
           ['token', token],
           ['userInfo', JSON.stringify(userInfo)],
         ]);
-        context.dispatch({type: 'login', token: token, userInfo: userInfo});
+        contextRef.current.dispatch({
+          type: 'login',
+          token: token,
+          userInfo: userInfo,
+        });
       },
       logout: async () => {
         await AsyncStorage.multiRemove(['token', 'userInfo']);
-        context.dispatch({
+        contextRef.current.dispatch({
           type: 'logout',
           token: undefined,
           userInfo: undefined,
         });
       },
     }),
-    [context],
+    [],
   );
 
   return {state: context.state, actions: authActions};
