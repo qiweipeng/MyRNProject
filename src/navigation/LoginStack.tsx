@@ -5,7 +5,7 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import {LoginParamList} from './ParamList';
-import LoginScreen from '../screens/LoginScreen';
+import LoginScreen from '@/screens/LoginScreen';
 
 const HEADER_TINT_COLOR = '#1A1D21'; // 导航栏标题颜色
 

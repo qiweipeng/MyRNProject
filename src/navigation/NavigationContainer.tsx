@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {MainStack} from './MainStack';
 import {LoginStack} from './LoginStack';
-import {useAuth} from '../contexts/AuthContext';
+import {useAuth} from '@/contexts/AuthContext';
 
 export default function Container(): JSX.Element {
   const {state} = useAuth();

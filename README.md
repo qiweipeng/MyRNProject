@@ -174,6 +174,61 @@ npx husky add .husky/pre-commit "yarn lint-staged && yarn tsc --skipLibCheck --n
 
 参考：[husky](https://typicode.github.io/husky/#/)，[lint-staged](https://github.com/okonet/lint-staged)
 
+## 支持绝对路径
+
+安装 `babel-plugin-module-resolver` 以支持绝对路径。
+
+```
+yarn add --dev babel-plugin-module-resolver
+```
+
+之后在 `babel.config.js` 中增加：
+
+``` javascript
+  // 这里将根路径设置为 babel.config.js 文件所在目录，然后设置 alias，即将 ./src 替换为 @
+  plugins: [
+    [
+      'module-resolver',
+      {
+        root: ['.'],
+        alias: {
+          '@': './src',
+        },
+      },
+    ],
+  ],
+```
+
+之后在 `tsconfig.json` 中增加：
+
+``` json
+    // 这里对应 babel.config.js 设置即可
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ],
+        }
+    },
+```
+
+再安装 `eslint-plugin-import` 和 `eslint-import-resolver-babel-module` 增加 ESLint 的兼容
+
+```
+yarn add --dev eslint-plugin-import eslint-import-resolver-babel-module
+```
+
+之后在 `.eslintrc.js` 中添加：
+
+``` javascript
+  settings: {
+    'import/resolver': {
+      'babel-module': {},
+    },
+  },
+```
+
 ## Reat Native 理解
 
 ### React Native 与本地的桥接

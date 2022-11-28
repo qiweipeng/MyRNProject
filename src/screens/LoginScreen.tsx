@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import {useAuth} from '../contexts/AuthContext';
+import {useAuth} from '@/contexts/AuthContext';
 
 export default function LoginScreen(): JSX.Element {
   const {

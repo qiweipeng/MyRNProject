@@ -14,4 +14,9 @@ module.exports = {
       plugins: ['@typescript-eslint'],
     },
   ],
+  settings: {
+    'import/resolver': {
+      'babel-module': {},
+    },
+  },
 };

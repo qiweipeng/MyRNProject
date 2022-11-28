@@ -8,8 +8,8 @@ import {
   Text,
 } from 'react-native';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import {MainTabParamList} from '../navigation/ParamList';
-import {useAuth} from '../contexts/AuthContext';
+import {MainTabParamList} from '@/navigation/ParamList';
+import {useAuth} from '@/contexts/AuthContext';
 
 type Props = BottomTabScreenProps<MainTabParamList, 'Mine'>;
 

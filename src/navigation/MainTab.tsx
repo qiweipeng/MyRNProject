@@ -2,8 +2,8 @@ import React from 'react';
 import {Image} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {MainTabParamList} from './ParamList';
-import HomeScreen from '../screens/HomeScreen';
-import MineScreen from '../screens/MineScreen';
+import HomeScreen from '@/screens/HomeScreen';
+import MineScreen from '@/screens/MineScreen';
 
 const TAB_BAR_ACTIVE_TINT_COLOR = '#FCD84D'; // 标签栏选中颜色
 const TAB_BAR_INACTIVE_TINT_COLOR = '#000000'; // 标签栏未选中颜色

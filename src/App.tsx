@@ -1,7 +1,7 @@
 import React from 'react';
 import {StatusBar} from 'react-native';
-import {AppProvider} from './contexts/AppProvider';
-import NavigationContainer from './navigation/NavigationContainer';
+import {AppProvider} from '@/contexts/AppProvider';
+import NavigationContainer from '@/navigation/NavigationContainer';
 
 function App(): JSX.Element {
   return (
