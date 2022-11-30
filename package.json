@@ -1,5 +1,6 @@
 {
   "name": "myrnproject",
+  "packageManager": "yarn@1.22.19",
   "version": "0.0.1",
   "private": true,
   "scripts": {
