@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {MainTabParamList} from './ParamList';
+import {MainTabParamList} from './MainParamList';
 import HomeScreen from '@/screens/HomeScreen';
 import MineScreen from '@/screens/MineScreen';
 

@@ -4,7 +4,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
-import {MainParamList} from './ParamList';
+import {MainParamList} from './MainParamList';
 import MainTab from './MainTab';
 
 const HEADER_TINT_COLOR = '#1A1D21'; // 导航栏标题颜色
