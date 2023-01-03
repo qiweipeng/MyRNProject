@@ -14,7 +14,7 @@ type UserInfo = {
 };
 
 type AuthState = {
-  isLoading: boolean;
+  loading: boolean;
   token?: string;
   userInfo?: UserInfo;
 };
@@ -30,21 +30,21 @@ function reducer(state: AuthState, action: AuthAction) {
     case 'retrieveToken':
       return {
         ...state,
-        isLoading: false,
+        loading: false,
         token: action.token,
         userInfo: action.userInfo,
       };
     case 'login':
       return {
         ...state,
-        isLoading: false,
+        loading: false,
         token: action.token,
         userInfo: action.userInfo,
       };
     case 'logout':
       return {
         ...state,
-        isLoading: false,
+        loading: false,
         token: undefined,
         userInfo: undefined,
       };
@@ -52,7 +52,7 @@ function reducer(state: AuthState, action: AuthAction) {
 }
 
 const initialState = {
-  isLoading: true,
+  loading: true,
   token: undefined,
   userInfo: undefined,
 };

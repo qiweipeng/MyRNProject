@@ -8,7 +8,7 @@ import {useAuth} from '@/contexts/AuthContext';
 export default function Container(): JSX.Element {
   const {state} = useAuth();
 
-  if (state.isLoading) {
+  if (state.loading) {
     return <View style={styles.loading} />;
   }
 
