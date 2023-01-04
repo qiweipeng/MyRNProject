@@ -17,7 +17,7 @@ export function LoginStack(): JSX.Element {
       screenOptions={{
         headerTitleAlign: 'center', // 安卓标题居中
         headerBackTitleVisible: false,
-        headerStyle: {elevation: 0, shadowOpacity: 0, borderBottomWidth: 0}, // 导航栏底部阴影
+        headerShadowVisible: false,
         headerTintColor: HEADER_TINT_COLOR,
         headerBackImage: () => {
           return (

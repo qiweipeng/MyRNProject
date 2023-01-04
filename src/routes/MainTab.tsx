@@ -18,7 +18,7 @@ export default function MainTab(): JSX.Element {
         headerTitleAlign: 'center', // 安卓标题居中
         tabBarActiveTintColor: TAB_BAR_ACTIVE_TINT_COLOR,
         tabBarInactiveTintColor: TAB_BAR_INACTIVE_TINT_COLOR,
-        headerStyle: {elevation: 0, shadowOpacity: 0, borderBottomWidth: 0}, // 导航栏底部阴影
+        headerShadowVisible: false,
         headerTintColor: HEADER_TINT_COLOR,
       }}>
       <Tab.Screen

@@ -21,7 +21,7 @@ export default function LoginScreen(): JSX.Element {
 
   return (
     <>
-      <StatusBar animated={false} barStyle="light-content" hidden={true} />
+      <StatusBar animated={false} barStyle="dark-content" hidden={false} />
       <SafeAreaView style={styles.container}>
         <ScrollView>
           <Text style={styles.title}>Let's sign you in.</Text>

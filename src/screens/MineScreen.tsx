@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   Text,
+  StatusBar,
 } from 'react-native';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {MainTabParamList} from '@/routes/MainParamList';
@@ -28,6 +29,7 @@ export default function MineScreen(props: Props): JSX.Element {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={{height: StatusBar.currentHeight}} />
       <ScrollView>
         <View style={styles.header}>
           <View style={styles.avatar} />
