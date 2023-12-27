@@ -1,79 +1,92 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# React Native 学习项目
 
-# Getting Started
+## 项目创建
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
-
-## Step 1: Start the Metro Server
-
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
-
-To start Metro, run the following command from the _root_ of your React Native project:
-
-```bash
-# using npm
-npm start
-
-# OR using Yarn
-yarn start
+``` zsh
+npx react-native@latest MyRNRroject
 ```
 
-## Step 2: Start your Application
+参考：[Creating a new application](https://reactnative.dev/docs/environment-setup#creating-a-new-application)
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+## 配置
 
-### For Android
+### Xcode 相关配置
 
-```bash
-# using npm
-npm run android
+修改 `Podfile`，禁用 `Hermes` 和 `Flipper`：
 
-# OR using Yarn
-yarn android
+``` ruby
+:hermes_enabled => false,
+# ...
+:flipper_configuration => FlipperConfiguration.disabled,
 ```
 
-### For iOS
+## Reat Native 理解（已废弃）
 
-```bash
-# using npm
-npm run ios
+### React Native 与本地的桥接
 
-# OR using Yarn
-yarn ios
+在 iOS 项目中，RN 的桥接主要是：
+
+一是创建 `RCTBridge` 这个类的对象，并设置代理。这决定了 RN 的内容如何加载到 iOS 项目中，在 Debug 环境下是实时加载的，而在 Release 环境下会打包到 `main.jsbundle` 中去。
+
+``` objc
+- (NSURL *)sourceURLForBridge:(RCTBridge *)bridge {
+#if DEBUG
+    return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
+#else
+    return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+#endif
+}
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+二是将创建一个 `UIView` 的 RN 的视图对象，并将这个视图作为一个 iOS 的控制器的根视图，以把 RN 的内容显示出来。
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+``` objc
+    NSDictionary *initProps = [self prepareInitialProps];
+    UIView *rootView = RCTAppSetupDefaultRootView(bridge, @"MyRNProject", initProps);
+```
 
-## Step 3: Modifying your App
+这个视图对象的创建需要三个参数：
 
-Now that you have successfully run the app, let's modify it.
+一是一个 `RCTBridge` 的对象。
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+二是 `moduleName` 即一个 RN 项目中的模块名，这里的字符串 `moduleName` 对应到 RN 中就是 index.js 中的 `AppRegistry.registerComponent(appName, () => App);` 的 `appName`。而 `AppRegistry.registerComponent(appName, () => App);` 中的 `App` 就是将要作为桥接的根视图显示的那个根组件，一般会是 `App.js`。也就是说，我们在 index.js 中可以使用该方法注册多个 `component`，然后提供给 iOS 中原生视图的不同控制器中，达到 React Native 与原生混编的目的。
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+三是 `initProps` 即初始的配置信息，比如在 React18 之后可以设置 `concurrentRoot` 的开关。
 
-## Congratulations! :tada:
+### 如何将 React Native 添加到现有到 iOS 项目中
 
-You've successfully run and modified your React Native App. :partying_face:
+最简便的方式是先创建一个完整的 RN 项目，再将 RN 项目中的 `ios` 文件夹中的内容替换为现有的项目。
 
-### Now what?
+下面介绍如何替换：
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+- 移除 RN 项目 `ios` 文件夹内容，将现有项目所有内容移动到 RN 项目的 `ios` 文件夹中；
+- 根据需要适当修改 `Podfile` 文件；
+- 参照 RN 中原有 iOS 项目的 `AppDelegate` 中的方式修改现有项目（当然也可以只在特定控制器引入 RN）；
+- 在 `Target - Build Phases` 中参照 RN 原有 iOS 项目添加 `Start Packager` 和 `Bundle React Native code and images` 脚本：
 
-# Troubleshooting
+``` shell
+// Start Packager
+// 不勾选 Show environment variables in build log
+export RCT_METRO_PORT="${RCT_METRO_PORT:=8081}"
+echo "export RCT_METRO_PORT=${RCT_METRO_PORT}" > "${SRCROOT}/../node_modules/react-native/scripts/.packager.env"
+if [ -z "${RCT_NO_LAUNCH_PACKAGER+xxx}" ] ; then
+  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then
+    if ! curl -s "http://localhost:${RCT_METRO_PORT}/status" | grep -q "packager-status:running" ; then
+      echo "Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly"
+      exit 2
+    fi
+  else
+    open "$SRCROOT/../node_modules/react-native/scripts/launchPackager.command" || echo "Can't start packager automatically"
+  fi
+fi
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+// Bundle React Native code and images
+set -e
 
-# Learn More
+WITH_ENVIRONMENT="../node_modules/react-native/scripts/xcode/with-environment.sh"
+REACT_NATIVE_XCODE="../node_modules/react-native/scripts/react-native-xcode.sh"
 
-To learn more about React Native, take a look at the following resources:
+/bin/sh -c "$WITH_ENVIRONMENT $REACT_NATIVE_XCODE"
+```
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+- 执行 `pod install`；
