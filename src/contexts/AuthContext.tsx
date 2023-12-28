@@ -6,6 +6,7 @@ const USERINFO_KEY = 'com.qiweipeng.myrnproject.userinfo';
 
 type UserInfo = {
   username: string;
+  // ...
 };
 
 type RequiredUserInfo = Required<UserInfo>;
