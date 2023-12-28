@@ -54,7 +54,6 @@ npx react-native@latest MyRNRroject
 {
  "editor.tabSize": 2,
  "editor.formatOnPaste": true,
- "eslint.packageManager": "yarn",
  "eslint.format.enable": true,
  "[javascript]": {
   "editor.defaultFormatter": "dbaeumer.vscode-eslint"
