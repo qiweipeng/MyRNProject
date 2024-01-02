@@ -1,13 +1,9 @@
-import React, {createContext, ReactNode, useReducer, useEffect} from 'react';
+import React, {createContext, ReactNode, useEffect, useReducer} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {UserInfo} from '@/constants';
 
 const TOKEN_KEY = 'com.qiweipeng.myrnproject.token';
 const USERINFO_KEY = 'com.qiweipeng.myrnproject.userinfo';
-
-type UserInfo = {
-  username: string;
-  // ...
-};
 
 type RequiredUserInfo = Required<UserInfo>;
 

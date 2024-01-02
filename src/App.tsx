@@ -1,13 +1,16 @@
 import React from 'react';
-import {SafeAreaView, Text} from 'react-native';
+import {StatusBar} from 'react-native';
 import 'react-native-gesture-handler'; // https://reactnavigation.org/docs/stack-navigator#installation
+import {AppProvider} from '@/contexts/AppProvider';
+import NavigationContainer from '@/routes/NavigationContainer';
 
-function App(): JSX.Element {
+export default function App() {
   return (
-    <SafeAreaView>
-      <Text>Hello World!</Text>
-    </SafeAreaView>
+    <>
+      <StatusBar animated={true} barStyle="dark-content" hidden={false} />
+      <AppProvider>
+        <NavigationContainer />
+      </AppProvider>
+    </>
   );
 }
-
-export default App;

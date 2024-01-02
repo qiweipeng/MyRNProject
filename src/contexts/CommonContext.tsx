@@ -1,23 +1,20 @@
 import React, {createContext, ReactNode, useEffect, useReducer} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {CommonInfo} from '@/constants';
 
 const COMMONINFO_KEY = 'com.qiweipeng.myrnproject.commoninfo';
 
-type Info = {
-  // ...
-};
-
-type PartialInfo = Partial<Info>;
-type RequiredInfo = Required<Info>;
+type PartialCommonInfo = Partial<CommonInfo>;
+type RequiredCommonInfo = Required<CommonInfo>;
 
 type CommonState = {
   loading: boolean;
-  info: PartialInfo;
+  info: PartialCommonInfo;
 };
 
 type ActionMap = {
-  retrieve: PartialInfo; // 应用启动取回本地缓存
-  save: PartialInfo; // 保存/清除
+  retrieve: PartialCommonInfo; // 应用启动取回本地缓存
+  save: PartialCommonInfo; // 保存/清除
 };
 
 type Action = {
@@ -64,7 +61,7 @@ const CommonProvider = ({children}: {children: ReactNode}) => {
     async function retrieve() {
       try {
         const value = await AsyncStorage.getItem(COMMONINFO_KEY);
-        const parsedValue: PartialInfo = value ? JSON.parse(value) : {};
+        const parsedValue: PartialCommonInfo = value ? JSON.parse(value) : {};
         dispatch({
           type: 'retrieve',
           payload: parsedValue,
@@ -86,5 +83,5 @@ const CommonProvider = ({children}: {children: ReactNode}) => {
   );
 };
 
-export type {CommonState, PartialInfo, RequiredInfo};
+export type {CommonState, PartialCommonInfo, RequiredCommonInfo};
 export {CommonContext, CommonProvider, COMMONINFO_KEY};

@@ -3,16 +3,16 @@ import {
   COMMONINFO_KEY,
   CommonContext,
   CommonState,
-  PartialInfo,
+  PartialCommonInfo,
 } from '@/contexts/CommonContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const useCommon = (): {
   state: CommonState;
   actions: {
-    save: <T extends keyof PartialInfo>(
+    save: <T extends keyof PartialCommonInfo>(
       key: T,
-      value: PartialInfo[T],
+      value: PartialCommonInfo[T],
     ) => Promise<void>;
   };
 } => {
@@ -28,12 +28,12 @@ const useCommon = (): {
 
   const authActions = useMemo(
     () => ({
-      save: async <T extends keyof PartialInfo>(
+      save: async <T extends keyof PartialCommonInfo>(
         key: T,
-        value: PartialInfo[T],
+        value: PartialCommonInfo[T],
       ) => {
         const commonValue = await AsyncStorage.getItem(COMMONINFO_KEY);
-        const parsedValue: PartialInfo = commonValue
+        const parsedValue: PartialCommonInfo = commonValue
           ? JSON.parse(commonValue)
           : {};
         const mergedValue = {
