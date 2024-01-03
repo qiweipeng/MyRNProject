@@ -22,6 +22,7 @@ export default function HomeScreen(props: Props) {
   const {navigation} = props;
   useLayoutEffect(() => {
     navigation.setOptions({
+      title: '我的',
       headerShown: false,
     });
   }, [navigation]);
