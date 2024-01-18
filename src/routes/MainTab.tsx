@@ -8,7 +8,7 @@ import {
   TAB_BAR_ACTIVE_TINT_COLOR,
   TAB_BAR_INACTIVE_TINT_COLOR,
 } from '@/constants';
-import {useAuth} from '@/hooks/useAuth';
+import {useAuth} from '@/contexts/useAuth';
 import {MainTabParamList} from './MainParamList';
 import HomeScreen from '@/screens/home/home/HomeScreen';
 import MineScreen from '@/screens/mine/mine/MineScreen';

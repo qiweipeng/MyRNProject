@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {MainStack} from './MainStack';
 import {LoginStack} from './LoginStack';
-import {useAuth} from '@/hooks/useAuth';
+import {useAuth} from '@/contexts/useAuth';
 
 export default function Container() {
   const {

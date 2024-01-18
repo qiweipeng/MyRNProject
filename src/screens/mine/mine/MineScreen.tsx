@@ -11,7 +11,7 @@ import {CompositeScreenProps} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {MainParamList, MainTabParamList} from '@/routes/MainParamList';
-import {useAuth} from '@/hooks/useAuth';
+import {useAuth} from '@/contexts/useAuth';
 
 type Props = CompositeScreenProps<
   BottomTabScreenProps<MainTabParamList, 'Mine'>,
