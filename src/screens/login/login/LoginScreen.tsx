@@ -3,7 +3,6 @@ import {
   StyleSheet,
   StatusBar,
   SafeAreaView,
-  KeyboardAvoidingView,
   ScrollView,
   View,
   Text,
@@ -32,7 +31,8 @@ export default function LoginScreen() {
           <Text style={styles.title}>Let's sign you in.</Text>
           <Text style={styles.subtitle}>Welcom back.</Text>
           <Text style={styles.subtitle}>You've been missed!</Text>
-          <KeyboardAvoidingView style={styles.middle} behavior="padding">
+          {/* FIXME: 输入框在安卓上的键盘规避问题 */}
+          <View style={styles.middle}>
             <TextInput
               style={styles.textInput}
               keyboardType="default"
@@ -52,7 +52,7 @@ export default function LoginScreen() {
               onChangeText={setPassword}
               value={password}
             />
-          </KeyboardAvoidingView>
+          </View>
           <View style={styles.register}>
             <Text style={styles.registerTip}>Don't have an account?</Text>
             <Text
